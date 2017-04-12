@@ -57,13 +57,8 @@ const main = async () => {
   if (!tweetsData) return
 
   const tommorow = getTommorow()
-
   const tweets = reduceTweets(tweetsData.filter(v => v.date === tommorow))
 
-  if (isDevelop) {
-    return console.log(tweets)
-  }
-    
   postTweetsAndSelfReplies(tweets)
 }
 
