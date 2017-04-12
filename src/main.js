@@ -50,7 +50,12 @@ const postTweetsAndSelfReplies = async (tweets) => {
 }
 
 const main = async () => {
-  const tweetsData = await getTweetsData()
+  const tweetsData = await getTweetsData().catch(error => {
+    postTweet(`@iMasanari ${error}`)
+  })
+
+  if (!tweetsData) return
+
   const tommorow = getTommorow()
 
   const tweets = reduceTweets(tweetsData.filter(v => v.date === tommorow))
@@ -58,7 +63,7 @@ const main = async () => {
   if (isDevelop) {
     return console.log(tweets)
   }
-  
+    
   postTweetsAndSelfReplies(tweets)
 }
 

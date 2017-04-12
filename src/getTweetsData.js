@@ -12,6 +12,15 @@ const formatDate = (yyyy_mm_dd) => {
 /** @return {Promise.<(TweetData | { date: string })[]>} */
 const getTweetsData = async () => {
   const response = await fetch(url, { headers: { 'X-CPAuthorize': 'Bearer ' + bearer } })
+
+  if (!response.ok) {
+    throw `取得エラーが発生しました
+url: ${response.url}
+status: ${response.status}
+statusText: ${response.statusText}
+body: ${await response.text()}`
+  }
+
   const json = await response.json()
 
   return json.map(data => {
