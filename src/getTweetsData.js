@@ -1,6 +1,8 @@
 const fetch = require('node-fetch')
 const bearer = require('../token.json').nua.bearer
 
+/** @typedef {{ tweet: string, replies: string[] }} TweetData */
+
 const url = 'https://www.nua.ac.jp/portal/api/KyukoInfo'
 
 /** @param {string} yyyy_mm_dd */
