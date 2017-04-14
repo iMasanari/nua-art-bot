@@ -57,7 +57,16 @@ const main = async () => {
   if (!tweetsData) return
 
   const tommorow = getTommorow()
-  const tweets = reduceTweets(tweetsData.filter(v => v.date === tommorow))
+  const tommorowTweetsData = tweetsData.filter(v => v.date === tommorow)
+
+  if (tommorowTweetsData.length === 0) {
+    tommorowTweetsData.push({
+      tweet: `${tommorow}の休講情報はありません`,
+      replies: []
+    })
+  }
+
+  const tweets = reduceTweets(tommorowTweetsData)
 
   postTweetsAndSelfReplies(tweets)
 }
