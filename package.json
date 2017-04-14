@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "start": "node index",
-    "develop": "NODE_ENV=develop node index",
+    "develop": "NODE_ENV=develop ./local_run.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {

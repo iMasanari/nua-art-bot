@@ -1,5 +1,5 @@
 const fetch = require('node-fetch')
-const bearer = require('../token.json').nua.bearer
+const bearer = process.env.NUA_BEARER
 
 /** @typedef {{ tweet: string, replies: string[] }} TweetData */
 

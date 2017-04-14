@@ -1,4 +1,4 @@
-token.json
+local_run.sh
 
 node_modules/
 *.DS_Store
