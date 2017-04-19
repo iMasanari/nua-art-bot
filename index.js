@@ -1,3 +1,6 @@
 const main = require('./src/main')
+const postTweet = require('./src/postTweet')
 
-main()
+main().catch(error => {
+  postTweet(`@iMasanari ${error}`)
+})

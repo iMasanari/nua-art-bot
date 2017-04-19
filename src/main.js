@@ -52,12 +52,13 @@ const postTweetsAndSelfReplies = async (tweets) => {
 }
 
 const main = async () => {
-  const tweetsDataList = await Promise.all([getKyukoTweetsData(), getHokoTweetsData(), getKyoshitsuChangeTweetsData()])
-    .catch(error => { postTweet(`@iMasanari ${error}`) })
+  const [kyuko, hoko, kyoshitsuChange] = await Promise.all([
+    getKyukoTweetsData(),
+    getHokoTweetsData(),
+    getKyoshitsuChangeTweetsData(),
+  ])
 
-  if (!tweetsDataList) return
-
-  const tweetsData = tweetsDataList.reduce((map, value) => map.concat(...value), [])
+  const tweetsData = [...kyuko, ...hoko, ...kyoshitsuChange]
 
   const tommorow = getTommorow()
   const tommorowTweetsData = tweetsData.filter(v => v.date === tommorow)
