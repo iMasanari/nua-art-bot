@@ -1,6 +1,7 @@
 const postTweet = require('./postTweet')
 const getKyukoTweetsData = require('./getKyukoTweetsData')
 const getHokoTweetsData = require('./getHokoTweetsData')
+const getKyoshitsuChangeTweetsData = require('./getKyoshitsuChangeTweetsData')
 
 /** @typedef {{ tweet: string, replies: string[] }} TweetData */
 
@@ -51,7 +52,7 @@ const postTweetsAndSelfReplies = async (tweets) => {
 }
 
 const main = async () => {
-  const tweetsDataList = await Promise.all([getKyukoTweetsData(), getHokoTweetsData()])
+  const tweetsDataList = await Promise.all([getKyukoTweetsData(), getHokoTweetsData(), getKyoshitsuChangeTweetsData()])
     .catch(error => { postTweet(`@iMasanari ${error}`) })
 
   if (!tweetsDataList) return
@@ -63,7 +64,7 @@ const main = async () => {
 
   if (tommorowTweetsData.length === 0) {
     tommorowTweetsData.push({
-      tweet: `${tommorow}の休講情報はありません`,
+      tweet: `${tommorow}の情報はありません`,
       replies: []
     })
   }
