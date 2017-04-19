@@ -1,7 +1,5 @@
 const postTweet = require('./postTweet')
-const getKyukoTweetsData = require('./getKyukoTweetsData')
-const getHokoTweetsData = require('./getHokoTweetsData')
-const getKyoshitsuChangeTweetsData = require('./getKyoshitsuChangeTweetsData')
+const getTweetsData = require('./getTweetsData')
 
 /** @typedef {{ tweet: string, replies: string[] }} TweetData */
 
@@ -52,13 +50,7 @@ const postTweetsAndSelfReplies = async (tweets) => {
 }
 
 const main = async () => {
-  const [kyuko, hoko, kyoshitsuChange] = await Promise.all([
-    getKyukoTweetsData(),
-    getHokoTweetsData(),
-    getKyoshitsuChangeTweetsData(),
-  ])
-
-  const tweetsData = [...kyuko, ...hoko, ...kyoshitsuChange]
+  const tweetsData = await getTweetsData()
 
   const tommorow = getTommorow()
   const tommorowTweetsData = tweetsData.filter(v => v.date === tommorow)
