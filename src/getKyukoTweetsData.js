@@ -9,6 +9,7 @@ module.exports = async () => {
     const date = formatDate(data.kyukoDate)
     const tweet = `【休講】${date} ${data.kogiNm}`
     const replies = [`@no_TL
+【休講】
 日時　${date}（${data.yobi}）
 講時　${data.jigen}限
 科目　${data.kogiNm}
