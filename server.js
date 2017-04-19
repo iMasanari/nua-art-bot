@@ -8,15 +8,18 @@ const postTweet = require('./src/postTweet')
 const app = express()
 const port = process.env.PORT || 3000
 
-app.get("/", (req, res) => {
+const runCommand = process.env.BOT_RUN_COMMAND_TYPE || 'run'
+const testCommand = process.env.BOT_TEST_COMMAND_TYPE || 'test'
+
+app.get('/', (req, res) => {
   res.send('Hello World!')
 
   switch (req.query.command) {
-    case 'run': {
+    case runCommand: {
       main()
       break
     }
-    case 'test': {
+    case testCommand: {
       postTweet(`@no_TL test tweet - ${new Date().toString()}`)
       break
     }
