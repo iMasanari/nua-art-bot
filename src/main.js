@@ -1,5 +1,5 @@
 const postTweet = require('./postTweet')
-const getTweetsData = require('./getTweetsData')
+const getKyukoTweetsData = require('./getKyukoTweetsData')
 
 /** @typedef {{ tweet: string, replies: string[] }} TweetData */
 
@@ -50,7 +50,7 @@ const postTweetsAndSelfReplies = async (tweets) => {
 }
 
 const main = async () => {
-  const tweetsData = await getTweetsData().catch(error => {
+  const tweetsData = await getKyukoTweetsData().catch(error => {
     postTweet(`@iMasanari ${error}`)
   })
 
