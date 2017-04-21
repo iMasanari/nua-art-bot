@@ -1,22 +1,6 @@
-const fetch = require('node-fetch')
-const bearer = process.env.NUA_BEARER
-const url = 'https://www.nua.ac.jp/portal/api/'
+const fetchPortalApi = require('./fetchPortalApi')
 
 /** @typedef {{ type: string, tweet: string, replies: string[], date: string }} TweetData */
-
-const fetchPortalApi = async (file) => {
-  const response = await fetch(url + file, { headers: { 'X-CPAuthorize': 'Bearer ' + bearer } })
-
-  if (!response.ok) {
-    throw `取得エラーが発生しました
-url: ${response.url}
-status: ${response.status}
-statusText: ${response.statusText}
-body: ${await response.text()}`
-  }
-
-  return response.json()
-}
 
 /** @param {string} yyyy_mm_dd */
 const formatDate = (yyyy_mm_dd) => {

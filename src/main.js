@@ -1,5 +1,6 @@
 const postTweet = require('./postTweet')
 const getTweetsData = require('./getTweetsData')
+const getTodayNews = require('./getTodayNews')
 
 /** @typedef {{ tweet: string, replies: string[] }} TweetData */
 
@@ -14,15 +15,16 @@ const getTommorow = () => {
 
 /**
  * @param {TweetData[]} tweets
+ * @param {string=} tweetHeader
  * @return {TweetData[]}
  */
-const reduceTweets = (tweets) =>
+const reduceTweets = (tweets, tweetHeader = '') =>
   tweets.reduce((newTweets, tweetData) => {
     let last = newTweets[newTweets.length - 1]
 
     if (!last || last.tweet.length + tweetData.tweet.length > 140) {
       last = {
-        tweet: '明日',
+        tweet: tweetHeader,
         replies: [],
       }
       newTweets.push(last)
@@ -49,7 +51,7 @@ const postTweetsAndSelfReplies = async (tweets) => {
   }
 }
 
-const main = async () => {
+const tweetTommorowKogi = async () => {
   const tweetsData = await getTweetsData()
 
   const tommorow = getTommorow()
@@ -62,9 +64,21 @@ const main = async () => {
     })
   }
 
-  const tweets = reduceTweets(tommorowTweetsData)
+  const tweets = reduceTweets(tommorowTweetsData, '明日')
 
-  postTweetsAndSelfReplies(tweets)
+  await postTweetsAndSelfReplies(tweets)
+}
+
+const tweetTodayNews = async () => {
+  const tweetsData = await getTodayNews()
+  const tweets = reduceTweets(tweetsData, 'お知らせ')
+
+  await postTweetsAndSelfReplies(tweets)
+}
+
+const main = async () => {
+  await tweetTommorowKogi()
+  await tweetTodayNews()
 }
 
 module.exports = main
