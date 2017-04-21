@@ -15,8 +15,11 @@ const client = new Twitter(token)
  * @return {Promise.<{id_str: string}>}
  */
 const postTweet = (tweetText, replyId) => {
+  tweetText = tweetText.length > 140 ? tweetText.substr(0, 140 - 1) + '…' : tweetText
+
+  console.log(tweetText + '\n')
+
   if (isDevelop) {
-    console.log(tweetText)
     return Promise.resolve({ id_str: 'test' })
   }
 
