@@ -55,7 +55,9 @@ const tweetTommorowKogi = async () => {
   const tweetsData = await getTweetsData()
 
   const tommorow = getTommorow()
-  const tommorowTweetsData = tweetsData.filter(v => v.date === tommorow)
+  const tommorowTweetsData = tweetsData
+    .filter(v => v.date === tommorow)
+    .sort((a, b) => a.tweet > b.tweet ? 1 : -1)
 
   if (tommorowTweetsData.length === 0) {
     tommorowTweetsData.push({
@@ -64,7 +66,7 @@ const tweetTommorowKogi = async () => {
     })
   }
 
-  const tweets = reduceTweets(tommorowTweetsData, '明日')
+  const tweets = reduceTweets(tommorowTweetsData, `明日（${tommorow}）`)
 
   await postTweetsAndSelfReplies(tweets)
 }

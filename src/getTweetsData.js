@@ -14,7 +14,7 @@ const getKyuko = async () => {
 
   return json.map((data) => {
     const date = formatDate(data.kyukoDate)
-    const tweet = `【休講】${date} ${data.kogiNm}`
+    const tweet = `${data.jigen}限【休講】${data.kogiNm}`
     const replies = [`@no_TL
 【休講】
 日時　${date}（${data.yobi}）
@@ -34,7 +34,7 @@ const getHoko = async () => {
 
   return json.map((data) => {
     const date = formatDate(data.hokoDate)
-    const tweet = `【補講】${date} ${data.hokoKogiNm}`
+    const tweet = `${data.hokoJigen}限【補講】${data.hokoKogiNm}`
 
     const replies = [`@no_TL
 【補講】
@@ -56,7 +56,7 @@ const getKyoshitsuChange = async () => {
 
   return json.map((data) => {
     const date = formatDate(data.kcDate)
-    const tweet = `【移動】${date} ${data.kcKogiNm}`
+    const tweet = `${data.kcJigen}限【移動】${data.kcKogiNm}`
 
     const replies = [`@no_TL
 【教室移動】
