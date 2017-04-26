@@ -1,16 +1,13 @@
+/* @flow */
 const fetchPortalApi = require('./fetchPortalApi')
 
-/** @typedef {{ type: string, tweet: string, replies: string[], date: string }} TweetData */
-
-/** @param {string} yyyy_mm_dd */
 const formatDate = (yyyy_mm_dd) => {
   const [, month, date] = yyyy_mm_dd.split('-')
   return `${+month}/${+date}`
 }
 
-/** @return {Promise.<TweetData[]>} */
 const getKyuko = async () => {
-  const json = await fetchPortalApi('KyukoInfo')
+  const json/*: any[] */ = await fetchPortalApi('KyukoInfo')
 
   return json.map((data) => {
     const date = formatDate(data.kyukoDate)
@@ -28,9 +25,8 @@ const getKyuko = async () => {
   })
 }
 
-/** @return {Promise.<TweetData[]>} */
 const getHoko = async () => {
-  const json = await fetchPortalApi('HokoInfo')
+  const json/*: any[] */ = await fetchPortalApi('HokoInfo')
 
   return json.map((data) => {
     const date = formatDate(data.hokoDate)
@@ -50,9 +46,8 @@ const getHoko = async () => {
   })
 }
 
-/** @return {Promise.<TweetData[]>} */
 const getKyoshitsuChange = async () => {
-  const json = await fetchPortalApi('KyoshitsuChangeInfo')
+  const json/*: any[] */ = await fetchPortalApi('KyoshitsuChangeInfo')
 
   return json.map((data) => {
     const date = formatDate(data.kcDate)

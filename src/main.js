@@ -1,8 +1,15 @@
+/* @flow */
 const postTweet = require('./postTweet')
 const getTweetsData = require('./getTweetsData')
 const getTodayNews = require('./getTodayNews')
 
-/** @typedef {{ tweet: string, replies: string[] }} TweetData */
+/*::
+  type TweetData = {
+    tweet: string,
+    replies: string[],
+    date?: string
+  }
+*/
 
 const isDevelop = process.env.NODE_ENV === 'develop'
 
@@ -13,12 +20,7 @@ const getTommorow = () => {
   return `${date.getMonth() + 1}/${date.getDate()}`
 }
 
-/**
- * @param {TweetData[]} tweets
- * @param {string=} tweetHeader
- * @return {TweetData[]}
- */
-const reduceTweets = (tweets, tweetHeader = '') =>
+const reduceTweets = (tweets /*: TweetData[] */, tweetHeader = '') =>
   tweets.reduce((newTweets, tweetData) => {
     let last = newTweets[newTweets.length - 1]
 
@@ -34,10 +36,9 @@ const reduceTweets = (tweets, tweetHeader = '') =>
     last.replies.push(...tweetData.replies)
 
     return newTweets
-  }, [])
+  }, ([] /*: TweetData[] */))
 
-/** @param {TweetData[]} tweets */
-const postTweetsAndSelfReplies = async (tweets) => {
+const postTweetsAndSelfReplies = async (tweets /*: TweetData[] */) => {
   for (const { tweet, replies } of tweets) {
     const res = await postTweet(tweet)
 

@@ -1,6 +1,5 @@
+/* @flow */
 const fetchPortalApi = require('./fetchPortalApi')
-
-/** @typedef {{ type: string, tweet: string, replies: string[] }} TweetData */
 
 /** @param {string} yyyy_mm_dd */
 const formatDate = (yyyy_mm_dd) => {
@@ -10,7 +9,7 @@ const formatDate = (yyyy_mm_dd) => {
 
 module.exports = async () => {
   // TODO: 取得urlを変更し、来年度に対応させる
-  const json = await fetchPortalApi('DeliveredNews/Nendo/2017')
+  const json/*: any[] */ = await fetchPortalApi('DeliveredNews/Nendo/2017')
 
   const now = new Date()
   const today = `${now.getMonth() + 1}/${now.getDate()}`

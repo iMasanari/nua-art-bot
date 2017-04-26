@@ -1,3 +1,4 @@
+/* @flow */
 const fetch = require('node-fetch')
 const client = require('cheerio-httpcli')
 
@@ -16,7 +17,7 @@ const tokenPromise = (async () => {
   return authorizePage.response.cookies.tokenAuth_access_token
 })()
 
-module.exports = async (file) => {
+module.exports = async (file /*: string */)/*: Promise<any> */ => {
   const response = await fetch(`${url}/api/${file}`, {
     headers: { 'X-CPAuthorize': `Bearer ${await tokenPromise}` }
   })
