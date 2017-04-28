@@ -1,7 +1,8 @@
 /* @flow */
+const moment = require('moment')
 const postTweet = require('./postTweet')
-const getTweetsData = require('./getTweetsData')
-const getTodayNews = require('./getTodayNews')
+const getKyukoEtc = require('./getKyukoEtc')
+const getNews = require('./getNews')
 
 /*::
   type TweetData = {
@@ -10,15 +11,6 @@ const getTodayNews = require('./getTodayNews')
     date?: string
   }
 */
-
-const isDevelop = process.env.NODE_ENV === 'develop'
-
-const getTommorow = () => {
-  const date = new Date()
-  date.setDate(date.getDate() + 1)
-
-  return `${date.getMonth() + 1}/${date.getDate()}`
-}
 
 const reduceTweets = (tweets /*: TweetData[] */, tweetHeader = '') =>
   tweets.reduce((newTweets, tweetData) => {
@@ -52,36 +44,26 @@ const postTweetsAndSelfReplies = async (tweets /*: TweetData[] */) => {
   }
 }
 
-const tweetTommorowKogi = async () => {
-  const tweetsData = await getTweetsData()
+const main = async () => {
+  // 明日の休講情報等を取得し、ツイートする
+  const tommorow = moment().add(1, 'days').format('YYYY-MM-DD')
+  const kyukoEtc = await getKyukoEtc(tommorow)
 
-  const tommorow = getTommorow()
-  const tommorowTweetsData = tweetsData
-    .filter(v => v.date === tommorow)
-    .sort((a, b) => a.tweet > b.tweet ? 1 : -1)
-
-  if (tommorowTweetsData.length === 0) {
-    tommorowTweetsData.push({
-      tweet: `${tommorow}の情報はありません`,
-      replies: []
-    })
+  if (kyukoEtc.length === 0) {
+    kyukoEtc.push({ tweet: '現在、休講等の情報は確認されていません', replies: [] })
+  }
+  else {
+    kyukoEtc.sort((a, b) => a.tweet > b.tweet ? 1 : -1)
   }
 
-  const tweets = reduceTweets(tommorowTweetsData, `明日（${tommorow}）`)
+  const tommorowShort = moment().add(1, 'days').format('M月D日')
+  await postTweetsAndSelfReplies(reduceTweets(kyukoEtc, `明日（${tommorowShort}）`))
 
-  await postTweetsAndSelfReplies(tweets)
-}
+  // 今日の新着お知らせを取得し、ツイートする
+  const today = moment().format('YYYY-MM-DD')
+  const newsData = await getNews(today)
 
-const tweetTodayNews = async () => {
-  const tweetsData = await getTodayNews()
-  const tweets = reduceTweets(tweetsData, 'お知らせ')
-
-  await postTweetsAndSelfReplies(tweets)
-}
-
-const main = async () => {
-  await tweetTommorowKogi()
-  await tweetTodayNews()
+  await postTweetsAndSelfReplies(reduceTweets(newsData, 'お知らせ'))
 }
 
 module.exports = main
