@@ -1,5 +1,4 @@
-/* @flow */
-const fetch = require('node-fetch')
+const fetch = require('isomorphic-fetch')
 const client = require('cheerio-httpcli')
 
 const UserName = process.env.NUA_USER_NAME
@@ -11,13 +10,16 @@ const tokenPromise = (async () => {
   const loginPage = await client.fetch(`${url}/Account/Login?ReturnUrl=%2Fportal%2F`)
   const loginRedirectPage = await loginPage.$('form').submit({ UserName, Password })
 
-  const _ClientTokenId = loginRedirectPage.body.match(/var _ClientTokenId = '(.+?)';/)[1]
+  const match = loginRedirectPage.body.match(/var _ClientTokenId = '(.+?)';/)
+
+  const _ClientTokenId = match? match[1] : ''
   const authorizePage = await client.fetch(`${url}/Account/Authorize?client_id=${_ClientTokenId}&response_type=token&state=`)
 
   return authorizePage.response.cookies.tokenAuth_access_token
 })()
 
-module.exports = async (file /*: string */)/*: Promise<any> */ => {
+/** @param {string} file */
+module.exports = async (file) => {
   const response = await fetch(`${url}/api/${file}`, {
     headers: { 'X-CPAuthorize': `Bearer ${await tokenPromise}` }
   })

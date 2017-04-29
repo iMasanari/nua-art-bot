@@ -16,11 +16,14 @@
   "dependencies": {
     "cheerio-httpcli": "^0.6.11",
     "express": "^4.15.2",
+    "isomorphic-fetch": "^2.2.1",
     "moment": "^2.18.1",
-    "node-fetch": "^1.6.3",
     "twitter": "^1.7.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/express": "^4.0.35",
+    "@types/isomorphic-fetch": "0.0.34"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC"

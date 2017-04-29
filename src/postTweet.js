@@ -1,5 +1,6 @@
-/* @flow */
+// @ts-ignore
 const Twitter = require('twitter')
+
 const token = {
   consumer_key: process.env.TWITTER_CONSUMER_KEY,
   consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
@@ -10,7 +11,11 @@ const token = {
 const isDevelop = process.env.NODE_ENV === 'develop'
 const client = new Twitter(token)
 
-const postTweet = (tweetText /*: string */, replyId /*: ?string */) => {
+/**
+ * @param {string} tweetText
+ * @param {string} [replyId]
+ */
+const postTweet = (tweetText, replyId) => {
   tweetText = tweetText.length > 140 ? tweetText.substr(0, 140 - 1) + '…' : tweetText
 
   console.log(tweetText + '\n')

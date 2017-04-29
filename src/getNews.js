@@ -1,12 +1,13 @@
-/* @flow */
 const fetchPortalApi = require('./fetchPortalApi')
 
-module.exports = async (YYYY_MM_DD/*: string */) => {
+/** @param {string} yyyy_mm_dd */
+module.exports = async (yyyy_mm_dd/*: string */) => {
   // TODO: 取得urlを変更し、来年度に対応させる
-  const json/*: any[] */ = await fetchPortalApi('DeliveredNews/Nendo/2017')
+  /** @type {any[]} */
+  const json = await fetchPortalApi('DeliveredNews/Nendo/2017')
 
   const promises = json
-    .filter((newsData) => newsData.newsDate === YYYY_MM_DD)
+    .filter((newsData) => newsData.newsDate === yyyy_mm_dd)
     .map(async (newsData) => {
       const deliveredNews = await fetchPortalApi(`DeliveredNews/${newsData.id}`)
 

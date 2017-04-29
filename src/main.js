@@ -1,18 +1,19 @@
-/* @flow */
 const moment = require('moment')
 const postTweet = require('./postTweet')
 const getKyukoEtc = require('./getKyukoEtc')
 const getNews = require('./getNews')
 
-/*::
-  type TweetData = {
-    tweet: string,
-    replies: string[],
-    date?: string
-  }
-*/
+/** @typedef {{ tweet: string, replies: string[] }} TweetData */
 
-const reduceTweets = (tweets /*: TweetData[] */, tweetHeader = '') =>
+/**
+ * checkJsに型キャストがないっぽい?ので
+ * 関数を使ってTweetDataの空の配列を取得する
+ * @type {function():TweetData[]}
+ */
+const getEnptyTweetDataArray = () => []
+
+/** @param {TweetData[]} tweets */
+const reduceTweets = (tweets, tweetHeader = '') =>
   tweets.reduce((newTweets, tweetData) => {
     let last = newTweets[newTweets.length - 1]
 
@@ -28,9 +29,10 @@ const reduceTweets = (tweets /*: TweetData[] */, tweetHeader = '') =>
     last.replies.push(...tweetData.replies)
 
     return newTweets
-  }, ([] /*: TweetData[] */))
+  }, getEnptyTweetDataArray())
 
-const postTweetsAndSelfReplies = async (tweets /*: TweetData[] */) => {
+/** @param {TweetData[]} tweets */
+const postTweetsAndSelfReplies = async (tweets) => {
   for (const { tweet, replies } of tweets) {
     const res = await postTweet(tweet)
 
@@ -47,6 +49,7 @@ const postTweetsAndSelfReplies = async (tweets /*: TweetData[] */) => {
 const main = async () => {
   // 明日の休講情報等を取得し、ツイートする
   const tommorow = moment().add(1, 'days').format('YYYY-MM-DD')
+  /** @type {TweetData[]} */
   const kyukoEtc = await getKyukoEtc(tommorow)
 
   if (kyukoEtc.length === 0) {

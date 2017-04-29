@@ -1,16 +1,20 @@
-/* @flow */
 const fetchPortalApi = require('./fetchPortalApi')
 
+/** @typedef {{ tweet: string, replies: string[] }} TweetData */
+
+/** @param {string} yyyy_mm_dd */
 const formatDate = (yyyy_mm_dd) => {
   const [, month, date] = yyyy_mm_dd.split('-')
   return `${+month}/${+date}`
 }
 
-const getKyuko = async (YYYY_MM_DD/*: ?string */) => {
-  const json/*: any[] */ = await fetchPortalApi('KyukoInfo')
+/** @param {string} yyyy_mm_dd */
+const getKyuko = async (yyyy_mm_dd) => {
+  /** @type {any[]} */
+  const json = await fetchPortalApi('KyukoInfo')
 
   return json
-    .filter((kyukoData) => !YYYY_MM_DD || kyukoData.kyukoDate === YYYY_MM_DD)
+    .filter((kyukoData) => !yyyy_mm_dd || kyukoData.kyukoDate === yyyy_mm_dd)
     .map((kyukoData) => {
       const date = formatDate(kyukoData.kyukoDate)
       const tweet = `${kyukoData.jigen}限【休講】${kyukoData.kogiNm}`
@@ -27,11 +31,13 @@ const getKyuko = async (YYYY_MM_DD/*: ?string */) => {
     })
 }
 
-const getHoko = async (YYYY_MM_DD/*: ?string */) => {
-  const json/*: any[] */ = await fetchPortalApi('HokoInfo')
+/** @param {string} yyyy_mm_dd */
+const getHoko = async (yyyy_mm_dd) => {
+  /** @type {any[]} */
+  const json = await fetchPortalApi('HokoInfo')
 
   return json
-    .filter((hokoData) => !YYYY_MM_DD || hokoData.hokoDate === YYYY_MM_DD)
+    .filter((hokoData) => !yyyy_mm_dd || hokoData.hokoDate === yyyy_mm_dd)
     .map((hokoData) => {
       const date = formatDate(hokoData.hokoDate)
       const tweet = `${hokoData.hokoJigen}限【補講】${hokoData.hokoKogiNm}`
@@ -50,11 +56,13 @@ const getHoko = async (YYYY_MM_DD/*: ?string */) => {
     })
 }
 
-const getKyoshitsuChange = async (YYYY_MM_DD/*: ?string */) => {
-  const json/*: any[] */ = await fetchPortalApi('KyoshitsuChangeInfo')
+/** @param {string} yyyy_mm_dd */
+const getKyoshitsuChange = async (yyyy_mm_dd) => {
+  /** @type {any[]} */
+  const json = await fetchPortalApi('KyoshitsuChangeInfo')
 
   return json
-    .filter((kcData) => !YYYY_MM_DD || kcData.kcDate === YYYY_MM_DD)
+    .filter((kcData) => !yyyy_mm_dd || kcData.kcDate === yyyy_mm_dd)
     .map((kcData) => {
       const date = formatDate(kcData.kcDate)
       const tweet = `${kcData.kcJigen}限【移動】${kcData.kcKogiNm}`
@@ -74,12 +82,13 @@ const getKyoshitsuChange = async (YYYY_MM_DD/*: ?string */) => {
     })
 }
 
-module.exports = async (YYYY_MM_DD/*: ?string */) => {
-  const kyukoEtc = await Promise.all([
-    getKyuko(YYYY_MM_DD),
-    getHoko(YYYY_MM_DD),
-    getKyoshitsuChange(YYYY_MM_DD)
+/** @param {string} yyyy_mm_dd */
+module.exports = async (yyyy_mm_dd) => {
+  const [kyuko, hoko, KyoshitsuChange] = await Promise.all([
+    getKyuko(yyyy_mm_dd),
+    getHoko(yyyy_mm_dd),
+    getKyoshitsuChange(yyyy_mm_dd)
   ])
 
-  return [].concat(...kyukoEtc)
+  return [...kyuko, ...hoko, ...KyoshitsuChange]
 }

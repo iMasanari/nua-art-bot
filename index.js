@@ -1,4 +1,3 @@
-/* @flow */
 const main = require('./src/main')
 const postTweet = require('./src/postTweet')
 
