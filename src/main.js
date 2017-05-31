@@ -1,7 +1,7 @@
 const moment = require('moment')
 const postTweet = require('./postTweet')
-const getKyukoEtc = require('./getKyukoEtc')
-const getNews = require('./getNews')
+const fetchKyukoEtc = require('./fetchKyukoEtc')
+const fetchNews = require('./fetchNews')
 
 /** @typedef {{ tweet: string, replies: string[] }} TweetData */
 
@@ -50,7 +50,7 @@ const main = async () => {
   // 明日の休講情報等を取得し、ツイートする
   const tommorow = moment().add(1, 'days').format('YYYY-MM-DD')
   /** @type {TweetData[]} */
-  const kyukoEtc = await getKyukoEtc(tommorow)
+  const kyukoEtc = await fetchKyukoEtc(tommorow)
 
   if (kyukoEtc.length === 0) {
     kyukoEtc.push({ tweet: '現在、休講等の情報は確認されていません', replies: [] })
@@ -64,7 +64,7 @@ const main = async () => {
 
   // 今日の新着お知らせを取得し、ツイートする
   const today = moment().format('YYYY-MM-DD')
-  const newsData = await getNews(today)
+  const newsData = await fetchNews(today)
 
   await postTweetsAndSelfReplies(reduceTweets(newsData, 'お知らせ'))
 }
