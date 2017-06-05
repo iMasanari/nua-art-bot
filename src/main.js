@@ -66,7 +66,7 @@ const main = async () => {
   const today = moment().format('YYYY-MM-DD')
   const newsData = await fetchNews(today)
 
-  await postTweetsAndSelfReplies(reduceTweets(newsData, 'お知らせ'))
+  await postTweetsAndSelfReplies(reduceTweets(newsData, 'お知らせ（西キャンパス情報のみ）'))
 }
 
 module.exports = main
