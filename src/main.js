@@ -8,7 +8,7 @@ const fetchNews = require('./fetchNews')
 /**
  * checkJsに型キャストがないっぽい?ので
  * 関数を使ってTweetDataの空の配列を取得する
- * @type {function():TweetData[]}
+ * @return {TweetData[]}
  */
 const getEnptyTweetDataArray = () => []
 
@@ -46,9 +46,11 @@ const postTweetsAndSelfReplies = async (tweets) => {
   }
 }
 
-const main = async () => {
-  // 明日の休講情報等を取得し、ツイートする
-  const tommorow = moment().add(1, 'days').format('YYYY-MM-DD')
+const tweetTommorowKyukoEtc = async () => {
+  const tommorowMoment = moment().add(1, 'days')
+  const tommorow = tommorowMoment.format('YYYY-MM-DD')
+  const tommorowShort = tommorowMoment.format('M月D日')
+
   /** @type {TweetData[]} */
   const kyukoEtc = await fetchKyukoEtc(tommorow)
 
@@ -59,14 +61,24 @@ const main = async () => {
     kyukoEtc.sort((a, b) => a.tweet > b.tweet ? 1 : -1)
   }
 
-  const tommorowShort = moment().add(1, 'days').format('M月D日')
   await postTweetsAndSelfReplies(reduceTweets(kyukoEtc, `明日（${tommorowShort}）`))
+}
 
-  // 今日の新着お知らせを取得し、ツイートする
+const tweetTodayNews = async () => {
   const today = moment().format('YYYY-MM-DD')
   const newsData = await fetchNews(today)
 
-  await postTweetsAndSelfReplies(reduceTweets(newsData, 'お知らせ（西キャンパス情報のみ）'))
+  if (newsData.length) {
+    await postTweetsAndSelfReplies(reduceTweets(newsData, 'お知らせ（西キャンパス情報のみ）'))
+  }
+}
+
+const main = async () => {
+  // 明日の休講情報等を取得し、ツイートする
+  await tweetTommorowKyukoEtc()
+
+  // 今日の新着お知らせを取得し、ツイートする
+  await tweetTodayNews()
 }
 
 module.exports = main
