@@ -15,18 +15,20 @@ const getEnptyTweetDataArray = () => []
 /** @param {TweetData[]} tweets */
 const reduceTweets = (tweets, tweetHeader = '') =>
   tweets.reduce((newTweets, tweetData) => {
-    let last = newTweets[newTweets.length - 1]
+    let currentTweet = newTweets[newTweets.length - 1]
 
-    if (!last || last.tweet.length + tweetData.tweet.length > 140) {
-      last = {
+    // 1ツイート目、または140文字を超える場合は新しいツイートを作成する
+    // +1しているのは改行文字のぶん
+    if (!currentTweet || currentTweet.tweet.length + tweetData.tweet.length + 1 > 140) {
+      currentTweet = {
         tweet: tweetHeader,
         replies: [],
       }
-      newTweets.push(last)
+      newTweets.push(currentTweet)
     }
 
-    last.tweet += '\n' + tweetData.tweet
-    last.replies.push(...tweetData.replies)
+    currentTweet.tweet += '\n' + tweetData.tweet
+    currentTweet.replies.push(...tweetData.replies)
 
     return newTweets
   }, getEnptyTweetDataArray())
