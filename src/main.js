@@ -5,16 +5,9 @@ const fetchNews = require('./fetchNews')
 
 /** @typedef {{ tweet: string, replies: string[] }} TweetData */
 
-/**
- * checkJsに型キャストがないっぽい?ので
- * 関数を使ってTweetDataの空の配列を取得する
- * @return {TweetData[]}
- */
-const getEnptyTweetDataArray = () => []
-
 /** @param {TweetData[]} tweets */
 const reduceTweets = (tweets, tweetHeader = '') =>
-  tweets.reduce((newTweets, tweetData) => {
+  tweets.reduce((/** @type {TweetData[]} */ newTweets, tweetData) => {
     let currentTweet = newTweets[newTweets.length - 1]
 
     // 1ツイート目、または140文字を超える場合は新しいツイートを作成する
@@ -31,7 +24,7 @@ const reduceTweets = (tweets, tweetHeader = '') =>
     currentTweet.replies.push(...tweetData.replies)
 
     return newTweets
-  }, getEnptyTweetDataArray())
+  }, [])
 
 /** @param {TweetData[]} tweets */
 const postTweetsAndSelfReplies = async (tweets) => {

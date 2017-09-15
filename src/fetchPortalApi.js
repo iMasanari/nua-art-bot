@@ -1,8 +1,8 @@
 const fetch = require('isomorphic-fetch')
 const client = require('cheerio-httpcli')
 
-const UserName = process.env.NUA_USER_NAME
-const Password = process.env.NUA_PASSWORD
+const UserName = /** @type {string} */ (process.env.NUA_USER_NAME)
+const Password = /** @type {string} */ (process.env.NUA_PASSWORD)
 
 const url = 'https://www.nua.ac.jp/portal'
 
@@ -12,7 +12,7 @@ const tokenPromise = (async () => {
 
   const match = loginRedirectPage.body.match(/var _ClientTokenId = '(.+?)';/)
 
-  const _ClientTokenId = match? match[1] : ''
+  const _ClientTokenId = match ? match[1] : ''
   const authorizePage = await client.fetch(`${url}/Account/Authorize?client_id=${_ClientTokenId}&response_type=token&state=`)
 
   return authorizePage.response.cookies.tokenAuth_access_token
