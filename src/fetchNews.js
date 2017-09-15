@@ -7,7 +7,7 @@ module.exports = async (yyyy_mm_dd/*: string */) => {
   const json = await fetchPortalApi('DeliveredNews/Nendo/2017')
 
   const promises = json
-    .filter((newsData) => newsData.newsDate === yyyy_mm_dd)
+    .filter((newsData) => newsData.newsDate.startsWith(yyyy_mm_dd))
     .map(async (newsData) => {
       const deliveredNews = await fetchPortalApi(`DeliveredNews/${newsData.id}`)
 
