@@ -6,7 +6,7 @@ const Password = /** @type {string} */ (process.env.NUA_PASSWORD)
 
 const url = 'https://www.nua.ac.jp/portal'
 
-const tokenPromise = (async () => {
+const getAccessToken = async () => {
   const loginPage = await client.fetch(`${url}/Account/Login?ReturnUrl=%2Fportal%2F`)
   const loginRedirectPage = await loginPage.$('form').submit({ UserName, Password })
 
@@ -16,12 +16,19 @@ const tokenPromise = (async () => {
   const authorizePage = await client.fetch(`${url}/Account/Authorize?client_id=${_ClientTokenId}&response_type=token&state=`)
 
   return authorizePage.response.cookies.tokenAuth_access_token
-})()
+}
+
+/** @type {string | undefined} */
+let accessToken
 
 /** @param {string} file */
 module.exports = async (file) => {
+  if (!accessToken) {
+    accessToken = await getAccessToken()
+  }
+
   const response = await fetch(`${url}/api/${file}`, {
-    headers: { 'X-CPAuthorize': `Bearer ${await tokenPromise}` }
+    headers: { 'X-CPAuthorize': `Bearer ${accessToken}` }
   })
 
   if (!response.ok) {
