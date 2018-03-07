@@ -1,4 +1,4 @@
-const fetch = require('node-fetch').default
+const { default: fetch } = require('node-fetch')
 const client = require('cheerio-httpcli')
 
 const UserName = /** @type {string} */ (process.env.NUA_USER_NAME)

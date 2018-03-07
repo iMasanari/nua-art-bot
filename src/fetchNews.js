@@ -1,7 +1,7 @@
 const fetchPortalApi = require('./fetchPortalApi')
 
 /** @param {string} yyyy_mm_dd */
-module.exports = async (yyyy_mm_dd/*: string */) => {
+module.exports = async (yyyy_mm_dd) => {
   // TODO: 取得urlを変更し、来年度に対応させる
   /** @type {any[]} */
   const json = await fetchPortalApi('DeliveredNews/Nendo/2017')

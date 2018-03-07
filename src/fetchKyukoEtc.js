@@ -1,7 +1,5 @@
 const fetchPortalApi = require('./fetchPortalApi')
 
-/** @typedef {{ tweet: string, replies: string[] }} TweetData */
-
 /** @param {string} yyyy_mm_dd */
 const formatDate = (yyyy_mm_dd) => {
   const [, month, date] = yyyy_mm_dd.split('-')
